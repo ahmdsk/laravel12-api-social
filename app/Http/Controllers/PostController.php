@@ -10,9 +10,10 @@ class PostController extends Controller
 {
     public function index()
     {
-        return response()->json(
-            Post::with(['user', 'comments.user'])->latest()->get()
-        );
+        $posts = Post::with(['user', 'comments.user'])->latest()->get();
+        return response()->json([
+            'data' => $posts
+        ]);
     }
 
     public function store(Request $request)
@@ -45,7 +46,7 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         if ($post->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Kamu tidak berhak mengedit postingan ini'], 403);
+            return response()->json(['message' => 'Kamu tidak berhak mengedit postingan ini'], 403);
         }
 
         $request->validate([
@@ -78,7 +79,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         if ($post->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Kamu tidak berhak menghapus postingan ini'], 403);
+            return response()->json(['message' => 'Kamu tidak berhak menghapus postingan ini'], 403);
         }
 
         $post->delete();

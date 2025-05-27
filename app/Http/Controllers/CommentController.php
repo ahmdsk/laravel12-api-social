@@ -26,11 +26,11 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         if ($comment->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Kamu tidak dapat menghapus komentar orang lain'], 403);
         }
 
         $comment->delete();
 
-        return response()->json(['message' => 'Comment deleted']);
+        return response()->json(['message' => 'Komentar berhasil dihapus'], 200);
     }
 }
