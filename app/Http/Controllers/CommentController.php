@@ -9,8 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, Post $post)
+    public function store(Request $request, $id)
     {
+        $post = Post::find($id);
+        if (!$post) {
+            return response()->json(['message' => 'Postingan tidak ditemukan'], 404);
+        }
+
         $request->validate([
             'comment' => 'required|string'
         ]);

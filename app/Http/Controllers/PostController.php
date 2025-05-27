@@ -40,11 +40,26 @@ class PostController extends Controller
             $data['image'] = $imageName;
         }
 
-        return response()->json($data, 201);
+        $post = Post::create([
+            'user_id' => Auth::id(),
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'image' => $data['image'] ?? null,
+        ]);
+
+        return response()->json([
+            'message'   => 'Berhasil membuat postingan',
+            'data'  => $post
+        ], 201);
     }
 
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
+        $post = Post::find($id);
+        if (!$post) {
+            return response()->json(['message' => 'Postingan tidak ditemukan'], 404);
+        }
+
         if ($post->user_id !== Auth::id()) {
             return response()->json(['message' => 'Kamu tidak berhak mengedit postingan ini'], 403);
         }
@@ -73,17 +88,25 @@ class PostController extends Controller
 
         $post->update($data);
 
-        return response()->json($post);
+        return response()->json([
+            'message'   => 'Berhasil update postingan',
+            'data'  => $data
+        ]);
     }
 
-    public function destroy(Post $post)
+    public function destroy($id)
     {
+        $post = Post::find($id);
+        if (!$post) {
+            return response()->json(['message' => 'Postingan tidak ditemukan'], 404);
+        }
+
         if ($post->user_id !== Auth::id()) {
             return response()->json(['message' => 'Kamu tidak berhak menghapus postingan ini'], 403);
         }
 
         $post->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json(['message' => 'Berhasil menghapus postingan']);
     }
 }
