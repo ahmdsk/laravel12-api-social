@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,13 @@ Route::middleware(['jwt'])->group(function () {
 
     Route::post('/posts/{id}/comments', [CommentController::class, 'store']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+
+    // Routes Items
+    Route::get('/items', [ItemsController::class, 'index']);
+    Route::get('/items/{id}', [ItemsController::class, 'show']);
+    Route::post('/items', [ItemsController::class, 'store']);
+    Route::put('/items/{id}', [ItemsController::class, 'update']);
+    Route::delete('/items/{id}', [ItemsController::class, 'destroy']);
 });
 
 Route::get('/healthcheck', function () {
