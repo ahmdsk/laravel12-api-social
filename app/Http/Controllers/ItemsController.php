@@ -45,10 +45,11 @@ class ItemsController extends Controller
 
         // Jika ada file gambar, simpan dan ambil URL-nya
         $imageUrl = null;
-        if($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            // Mendapatkan URL lengkap untuk gambar yang diunggah dengan path nya contoh nya 127.0.0.1:8000/storage/images/nama_file.jpg
-            $imageUrl = url('storage/' . $imagePath);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName(); // nama file unik
+            $image->move(public_path('images'), $imageName); // simpan ke folder public/images
+            $imageUrl = url('images/' . $imageName); // hasil URL: http://127.0.0.1:8000/images/nama_file.jpg
         } else {
             $imageUrl = null;
         }
@@ -107,12 +108,13 @@ class ItemsController extends Controller
 
         // Jika ada file gambar, simpan dan ambil URL-nya
         $imageUrl = null;
-        if($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            // Mendapatkan URL lengkap untuk gambar yang diunggah dengan path nya contoh nya
-            $imageUrl = url('storage/' . $imagePath);
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName(); // nama file unik
+            $image->move(public_path('images'), $imageName); // simpan ke folder public/images
+            $imageUrl = url('images/' . $imageName); // hasil URL: http://127.0.0.1:8000/images/nama_file.jpg
         } else {
-            $imageUrl = $item->image_url; // Tetap gunakan URL gambar lama jika tidak ada gambar baru
+            $imageUrl = $item->image_url; // gunakan URL gambar yang sudah ada jika tidak ada gambar baru
         }
 
         $item->update([
