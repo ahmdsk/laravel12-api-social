@@ -44,22 +44,22 @@ class ItemsController extends Controller
         }
 
         // Jika ada file gambar, simpan dan ambil URL-nya
-        $imageUrl = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName(); // nama file unik
-            $image->move(public_path('images'), $imageName); // simpan ke folder public/images
-            $imageUrl = url('images/' . $imageName); // hasil URL: http://127.0.0.1:8000/images/nama_file.jpg
-        } else {
-            $imageUrl = null;
-        }
+        // $imageUrl = null;
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $imageName = time() . '_' . $image->getClientOriginalName(); // nama file unik
+        //     $image->move(public_path('images'), $imageName); // simpan ke folder public/images
+        //     $imageUrl = url('images/' . $imageName); // hasil URL: http://127.0.0.1:8000/images/nama_file.jpg
+        // } else {
+        //     $imageUrl = null;
+        // }
 
         $item = Items::create([
             'user_id'     => $auth->id,
             'title'       => $request->title,
             'description' => $request->description,
             'price'       => $request->price,
-            'image_url'   => $imageUrl,
+            'image_url'   => $request->image,
             'category'    => $request->category,
         ]);
 
@@ -107,21 +107,21 @@ class ItemsController extends Controller
         }
 
         // Jika ada file gambar, simpan dan ambil URL-nya
-        $imageUrl = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName(); // nama file unik
-            $image->move(public_path('images'), $imageName); // simpan ke folder public/images
-            $imageUrl = url('images/' . $imageName); // hasil URL: http://127.0.0.1:8000/images/nama_file.jpg
-        } else {
-            $imageUrl = $item->image_url; // gunakan URL gambar yang sudah ada jika tidak ada gambar baru
-        }
+        // $imageUrl = null;
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $imageName = time() . '_' . $image->getClientOriginalName(); // nama file unik
+        //     $image->move(public_path('images'), $imageName); // simpan ke folder public/images
+        //     $imageUrl = url('images/' . $imageName); // hasil URL: http://127.0.0.1:8000/images/nama_file.jpg
+        // } else {
+        //     $imageUrl = $item->image_url; // gunakan URL gambar yang sudah ada jika tidak ada gambar baru
+        // }
 
         $item->update([
             'title'       => $request->title,
             'description' => $request->description,
             'price'       => $request->price,
-            'image_url'   => $imageUrl,
+            'image_url'   => $request->image,
             'category'    => $request->category,
         ]);
 
